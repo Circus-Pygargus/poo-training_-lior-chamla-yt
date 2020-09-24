@@ -11,23 +11,13 @@ require_once('librairies/database.php');
 require_once('librairies/utils.php');
 
 /**
- * 1. Connexion à la base de données avec PDO
- * Attention, on précise ici deux options :
- * - Le mode d'erreur : le mode exception permet à PDO de nous prévenir violament quand on fait une connerie ;-)
- * - Le mode d'exploitation : FETCH_ASSOC veut dire qu'on exploitera les données sous la forme de tableaux associatifs
- */
-$pdo = getPdo();
-
-/**
  * 2. Récupération des articles
  */
-// On utilisera ici la méthode query (pas besoin de préparation car aucune variable n'entre en jeu)
-$resultats = $pdo->query('SELECT * FROM articles ORDER BY created_at DESC');
-// On fouille le résultat pour en extraire les données réelles
-$articles = $resultats->fetchAll();
+$articles = findAllArticles();
 
 /**
  * 3. Affichage
  */
-// compact() will build an associative array where ['articles' => $articles] 
-render('articles/index', compact('articles'));
+$pageTitle = "Accueil";
+// compact() will build an associative array where ['pageTitle' => $pageTitle, 'articles' => $articles] 
+render('articles/index', compact('pageTitle', 'articles'));
