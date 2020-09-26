@@ -26,7 +26,7 @@ $id = $_GET['id'];
  */
 $model = new Article();
 
-$article = $model->findOne($id);
+$article = $model->findbyId($id);
 if (!$article) {
     die("L'article $id n'existe pas, vous ne pouvez donc pas le supprimer !");
 }

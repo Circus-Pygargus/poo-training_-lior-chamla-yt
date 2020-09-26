@@ -41,7 +41,7 @@ if (!$article_id) {
  * On va ici utiliser une requête préparée car elle inclue une variable qui provient de l'utilisateur : Ne faites
  * jamais confiance à ce connard d'utilisateur ! :D
  */
-$article = $articleModel->findOne($article_id);
+$article = $articleModel->findbyId($article_id);
 
 /**
  * 4. Récupération des commentaires de l'article en question

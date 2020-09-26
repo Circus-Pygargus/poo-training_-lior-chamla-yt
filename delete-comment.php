@@ -19,7 +19,7 @@ $id = $_GET['id'];
 
 $model = new Comment()
 ;
-$commentaire = $model->findOne($id);
+$commentaire = $model->findbyId($id);
 
 if (empty($_GET['id']) || !ctype_digit($_GET['id'])) {
     die("Ho ! Fallait préciser le paramètre id en GET !");

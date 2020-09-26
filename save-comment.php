@@ -65,7 +65,7 @@ if (!$author || !$article_id || !$content) {
  * PS : Ca fait pas genre 3 fois qu'on écrit ces lignes pour se connecter ?! 
  */
 
-$article = $articleModel->findOne($article_id);
+$article = $articleModel->findbyId($article_id);
 
 // Si rien n'est revenu, on fait une erreur
 if (!$article) {
