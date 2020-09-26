@@ -9,6 +9,7 @@
 
 require_once('librairies/database.php');
 require_once('librairies/utils.php');
+require_once('librairies/models/Comment.php');
 
 /**
  * 1. Récupération du paramètre "id" en GET
@@ -16,7 +17,9 @@ require_once('librairies/utils.php');
 
 $id = $_GET['id'];
 
-$commentaire = findComment($id);
+$model = new Comment()
+;
+$commentaire = $model->findOne($id);
 
 if (empty($_GET['id']) || !ctype_digit($_GET['id'])) {
     die("Ho ! Fallait préciser le paramètre id en GET !");
@@ -24,7 +27,7 @@ if (empty($_GET['id']) || !ctype_digit($_GET['id'])) {
 
 $article_id = $commentaire['article_id'];
 
-deleteComment($id);
+$model->delete($id);
 
 /**
  * 5. Redirection vers l'article en question

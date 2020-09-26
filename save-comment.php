@@ -16,6 +16,12 @@
 
 require_once('librairies/database.php');
 require_once('librairies/utils.php');
+require_once('librairies/models/Article.php');
+require_once('librairies/models/Comment.php');
+
+
+$articleModel = new Article();
+$commentModel = new Comment();
 
 /**
  * 1. On vérifie que les données ont bien été envoyées en POST
@@ -59,7 +65,7 @@ if (!$author || !$article_id || !$content) {
  * PS : Ca fait pas genre 3 fois qu'on écrit ces lignes pour se connecter ?! 
  */
 
-$article = findArticle($article_id);
+$article = $articleModel->findOne($article_id);
 
 // Si rien n'est revenu, on fait une erreur
 if (!$article) {
@@ -67,7 +73,7 @@ if (!$article) {
 }
 
 // 3. Insertion du commentaire
-saveComment($author, $content, $article_id);
+$commentModel->saveOne($author, $content, $article_id);
 // $query = $pdo->prepare('INSERT INTO comments SET author = :author, content = :content, article_id = :article_id, created_at = NOW()');
 // $query->execute(compact('author', 'content', 'article_id'));
 
