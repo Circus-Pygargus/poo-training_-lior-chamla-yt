@@ -1,0 +1,81 @@
+_ install d'une vagrant et ses provisions
+    sudo systemctl restart apache2
+_ modif du nom de la bdd dans blogpoo.sql : blogpoo en pooliorchamla
+idem dans index.php, ici modif aussi du mot de passe pour accès bdd
+_ enregistrement de la bdd via le code de blogpoo.sql et phpmyadmmin
+_ création du repo sur git : poo-training_-lior-chamla-yt
+_ 1er commit : first commit
+
+
+on crée la function getPdo() dans le nouveau fichier libraries/database.php
+on crée la function render(string $path, array $variables) dans le nouveau fichier libraries/utils.php
+création de la function redirect dans libraries/utils.php
+git commit "refactoristaion en fonctions"
+
+
+on vire la requête sql de index.php et on la colle dans la nouvelle function findAllArticles() dans database.php
+on vire les requêtes présentes dans article.php dans les nouvelles fonctions findArticle($id) et findAllComments($id) dans database.php
+dans delete-article.php, 
+    on remplace la recherche de l'article à effacer par un appel à la fonction existante findArticle(), modif de la vérif d'existance, puis on colle la requête d'effacement dans la nouvelle function deleteArticle($id) dans database.php
+modif de save-comment.php et création de la function saveComment($comment) dans database.php
+modif de delete-comment.php avec création de findComment($id) et deleteComment($id) dans database.php
+git commit "refactorisation des requêtes sql"
+
+
+Création du dossier binaries/models
+Création du fichier Models/Article.php, on y crée la class Article
+on y colle la méthode findAllArticles() de database.php, on en fait une méthode publique
+idem avec findArticle()
+idem avec deleteArticle()
+modif de index.php avec require_once sur la nouvelle classe, puis on l'instancie pour pouvoir l'utiliser
+Création de /models/Comment.php on colle dans cette classe ce qui est dans databese.php (sauf le getPdo() évidemment)
+on modif le code dans tous les fichiers qui utilisent des articles ou des commentaires en utilisant Article et Comment
+Création de la classe models/Model.php, on y colle la partie $dpo->getPdo(), on en fait la classe mère de Article et Comment
+git commit "création des modèles"
+
+
+on colle dans models/Model.php les méthodes findOne() et delete() qui sont en commun dans Article et Comment
+on profite de l'héritage de classe pour y acceder facilement
+on transforme aussi Model en classe abstraite pour être tranquille, car aucune raison de l'instancier ..
+git commit "héritage de classe"
+
+
+Ajout de namespace : Controllers et Models
+Création des classes \Controllers\Article et \Controllers\Comment on y colle le code présent dans index.php article.php save-comment.php ...
+Création de la classe abstraite Controller
+git commit "Ajout de namespace"
+
+
+Ajout de l'autoloading des classes: 
+création du fichier: /libraries/autoload.php, on y colle :
+    spl_autoload_register(function($className) {
+        $className = str_replace("\\", "/", $className);
+
+        require_once("libraries/$className.php");
+    });
+ensuite on remplace tous les require_once qui appellent un controller ou un model par :
+    require_once('libraries/autoload.php');
+mais uniquement dans app/index.php et app/article.php et autres fichiers directement dans /app/
+on peut virer les require_once qui font appel à un controller ou un model de tous les controllers ou models ! cool !!
+git commit "Ajout d'un autoloader de classes"
+
+
+transformation des méthodes contenues dans les fichiers libraries/database.php et libraries/utils.php en méthodes statiques
+d'ailleurs le contenu de utils.php est découpé en 2 classes : Http.php et Renderer.php
+on modifie les méthodes présentes dans libraries/Database, Http et Renderer en méthodes statiques, on pourra les appeler plus facilement dans les autres fichiers et virer définitivement les require_once présents dans les controllers ;)
+on modif également dans les controllers les appels aux méthodes render() par \renderer::render() et redirect() par \Http::redirect()
+git commit "les méthodes statiques"
+
+
+Ici on va créer la classe Application pour pouvoir virer tous les fichiers présents à la racine de site et en avoir un seul à la place
+dans Applcation, on récupère avec la méthode Get le nom du controller désiré et la méthode voulue
+on modifie index.php pour appeler Applcation::process()
+on efface tous les fichiers à la racine de app dont on a plus besoin
+on modifie les liens dans les templates pour qu'ils informent du controlleur et de la méthode voulue
+on modif aussi dans les controllers les redirections vers d'autres fichiers que index.php vers index.php
+git commit "ajout de la classe Application"
+
+
+transformation de Database.php en singleton
+permettra de n'avoir qu'une seule connexion à la bdd à la fois
+git commit "transformation de Database.php en singleton"
