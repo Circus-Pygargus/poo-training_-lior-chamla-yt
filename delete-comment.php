@@ -7,29 +7,8 @@
  * Puis on le supprimera !
  */
 
-require_once('librairies/database.php');
-require_once('librairies/utils.php');
-require_once('librairies/models/Comment.php');
+require_once('librairies/controllers/Comment.php');
 
-/**
- * 1. Récupération du paramètre "id" en GET
- */
+$controller = new \Controllers\Comment();
 
-$id = $_GET['id'];
-
-$model = new Comment()
-;
-$commentaire = $model->findbyId($id);
-
-if (empty($_GET['id']) || !ctype_digit($_GET['id'])) {
-    die("Ho ! Fallait préciser le paramètre id en GET !");
-}
-
-$article_id = $commentaire['article_id'];
-
-$model->delete($id);
-
-/**
- * 5. Redirection vers l'article en question
- */
-redirect("article.php?id=" . $article_id);
+$controller->delete();

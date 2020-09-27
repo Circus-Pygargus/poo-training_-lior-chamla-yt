@@ -7,20 +7,8 @@
  * puis on va boucler dessus pour afficher chacun d'entre eux
  */
 
-require_once('librairies/database.php');
-require_once('librairies/utils.php');
-require_once('librairies/models/Article.php');
+require_once('librairies/controllers/Article.php');
 
-$model = new Article();
+$controller = new \Controllers\Article();
 
-/**
- * 2. Récupération des articles
- */
-$articles = $model->findAll("created_at DESC");
-
-/**
- * 3. Affichage
- */
-$pageTitle = "Accueil";
-// compact() will build an associative array where ['pageTitle' => $pageTitle, 'articles' => $articles] 
-render('articles/index', compact('pageTitle', 'articles'));
+$controller->index();
