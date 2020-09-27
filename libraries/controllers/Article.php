@@ -2,7 +2,6 @@
 
 namespace Controllers;
 
-require_once('libraries/utils.php');
 
 class Article extends Controller
 {
@@ -31,7 +30,7 @@ class Article extends Controller
          */
         $pageTitle = "Accueil";
         // compact() will build an associative array where ['pageTitle' => $pageTitle, 'articles' => $articles] 
-        render('articles/index', compact('pageTitle', 'articles'));
+        \renderer::render('articles/index', compact('pageTitle', 'articles'));
     }
 
 
@@ -76,7 +75,7 @@ class Article extends Controller
 
         $pageTitle = $article['title'];
 
-        render('articles/show', compact('pageTitle', 'article', 'commentaires', 'article_id'));
+        \Renderer::render('articles/show', compact('pageTitle', 'article', 'commentaires', 'article_id'));
     }
 
     public function delete ()
@@ -109,7 +108,7 @@ class Article extends Controller
         /**
          * 5. Redirection vers la page d'accueil
          */
-        redirect('index.php');
+        \Http::redirect('index.php');
         
     }
 }
